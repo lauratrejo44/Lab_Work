@@ -1,0 +1,71 @@
+---
+title: "In class ex 8"
+author: "Laura Trejo"
+date: "March 1, 2017"
+output: md_document
+---
+
+##Reading in data files
+
+```{r}
+cocoli_dat <- read.table("~/Desktop/eeb-177/class-work/classwork-21-Feb/cocoli.txt", header = TRUE)
+cocoli_dat
+str(cocoli_dat)
+
+```
+```{r}
+cocoli_dat
+sizes_in_94 <- cocoli_dat$dbh1
+names(sizes_in_94) <- cocoli_dat$tag 
+sizes_in_94 #vecors in r (like lists in python)
+#index here is 1 
+sizes_in_94["000009"]
+# to make a vector in r use c (cocatenate)
+sizes_in_94[c("000009","000099")]
+#relative growth rate- difference divided by first value 
+sizes_in_97 <- cocoli_dat$dbh2
+rgr_1 <- ((sizes_in_97- sizes_in_94)/sizes_in_94)/3
+rgr_1 #stand alone vector 
+#force it to be stuck on the end 
+cocoli_dat$rgr1 <- rgr_1 #growth rate across years, we usually compare yearly ,need to standardize to be yearly
+cocoli_dat
+```
+
+```{r}
+#use ggplot2 grammer of graphics  start off with (raw data set) this is the data that i want to play with and this is how i want to structure my graphs
+#compare baser
+#bar graph - make with barplot() 
+#box - make with with boxplot() 
+#scatterplot - mkae with plot() 
+#histogram- make with hist () 
+hist(sizes_in_94, xlab = "DBH (mm)", main = "Distribution of three sizes in Cocoli(1994)")
+?hist
+plot(x= sizes_in_94, y = sizes_in_97, main = "Scatterplot of sizes", xlab = "Size in 1994 (mm)", ylab = "Size in 1997 (mm)", pch = 3, col = "darkgreen", log = "xy")
+#using log can help if you have fossil where there was a lot more fossils in one time 
+#data plyer changes how your data looks (can be done in baser as well) 
+
+
+
+
+
+
+
+
+```
+
+```{r}
+library(dplyr)
+# to filter out data by a factor,give it a list u want to work with 
+# %>% is identical to the | in terminal 
+cocoli_dat
+#filter out all rows where dbh was greater than 0
+#if u just want row use select 
+#which was the biggest tree use arrange in ascending order( use negative to be descending), desc in descending
+#which spp did it belong to 
+#group_by and look at the average size of each spp in 1994 
+cocoli_dat %>% filter(dbh1>0) %>% group_by(spcode) %>% summarize(sum_dbh_1994 = sum (dbh1))
+#total area occupied by spp in 1994 use sum 
+
+
+```
+
