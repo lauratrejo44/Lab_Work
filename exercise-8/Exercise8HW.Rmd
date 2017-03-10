@@ -2,7 +2,7 @@
 title: "week-8-hw"
 author: "Laura Trejo"
 date: "March 1, 2017"
-output: md_document
+output: html_document
 ---
 
 ```{r}
@@ -148,13 +148,27 @@ ggplot(dat, aes(x = CPI, y = HDI, size = HDI.Rank)) + geom_point() + geom_smooth
 
 ```{r}
 #Exercise III
-ggplot(dat, aes(x = CPI, y = HDI, size = HDI.Rank)) + geom_point(aes(color = Region))
+
+dat <- read.csv("/home/eeb177-student/Desktop/eeb-177/lab_hw/Rgraphics/dataSets/EconomistData.csv")
+head(dat)
+ggplot(dat, aes(x = CPI, y = HDI)) + geom_point(aes(color = Region)) +  scale_x_discrete(name="Corruption Perception Index ") + scale_y_continuous(name="Human Development Index") + scale_color_manual(name = "Region of the world",
+values = c("Blue","Red","Green","Yellow","Purple","Pink"))
+
 
 
 ```
 
 ```{r}
 #Challenge: Recreate the economist graph 
+## install.packages("ggrepel") 
+library("ggrepel")
+dat <- read.csv("/home/eeb177-student/Desktop/eeb-177/lab_hw/Rgraphics/dataSets/EconomistData.csv")
+head(dat)
+points_label <- c( "Brazil", "Russia", "China", "South Africa", "Spain", " France", "Germany", "Japan") 
+countries_label <- c("Venezuela", "Iraq", "Myanmar", "Sudan","Afghanistan", "Congo", "Greece", "Argentina", "India", "Italy",  "Botswana", "Cape Verde", "Bhutan", "Rwanda", "United States", "Britain", "Barbados", "Norway", "New Zealand", "Singapore")
+ggplot(dat, aes(x = CPI, y = HDI)) + geom_point(aes(color = Region), shape = 1, size = 4) + geom_text (aes(label=Country), size = 2, data = subset(dat, Country %in% countries_label)) + scale_x_discrete(name="Corruption Perception Index, 2011 (10=least corrupt ") + scale_y_continuous(name="Human Development Index") + geom_smooth(aes(group = 1), method = "lm", formula = y ~ log(x), se = FALSE, color = "red") + geom_text_repel (aes(label = Country), size = 2, data = subset(dat, Country %in% points_label), force = 10) + ggtitle("Corruption and Human development")
+
+
 
 ```
 
